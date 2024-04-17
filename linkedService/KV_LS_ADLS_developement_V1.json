@@ -1,0 +1,11 @@
+{
+	"name": "KV_LS_ADLS_developement_V1",
+	"type": "Microsoft.DataFactory/factories/linkedservices",
+	"properties": {
+		"annotations": [],
+		"type": "AzureKeyVault",
+		"typeProperties": {
+			"baseUrl": "https://KV-ade-rama1.vault.azure.net/"
+		}
+	}
+}

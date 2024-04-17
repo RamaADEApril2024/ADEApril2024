@@ -1,0 +1,65 @@
+{
+	"name": "DF_Fuzzy_Join",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_Fuzzy_Join_Left",
+						"type": "DatasetReference"
+					},
+					"name": "FuzzyLeft"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_Fuzzy_Join_right",
+						"type": "DatasetReference"
+					},
+					"name": "FuzzyRight"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DF_emp_Output_filters",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "FuzzyJoin"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          {Fruits Data} as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> FuzzyLeft",
+				"source(output(",
+				"          Fruits as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> FuzzyRight",
+				"FuzzyLeft, FuzzyRight join(fuzzyCompare({Fruits Data}, Fruits, 74.00),",
+				"     joinType:'inner',",
+				"     matchType:'fuzzy',",
+				"     ignoreSpaces: false,",
+				"     scoreColumn:'Score',",
+				"     broadcast: 'off')~> FuzzyJoin",
+				"FuzzyJoin sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> sink1"
+			]
+		}
+	}
+}

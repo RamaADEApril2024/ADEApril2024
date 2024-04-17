@@ -1,0 +1,19 @@
+{
+	"name": "PL_Schedule_trigger_V1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Wait1",
+				"type": "Wait",
+				"dependsOn": [],
+				"userProperties": [],
+				"typeProperties": {
+					"waitTimeInSeconds": 60
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-04-16T13:10:43Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

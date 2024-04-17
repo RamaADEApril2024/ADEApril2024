@@ -1,0 +1,76 @@
+{
+	"name": "DF_union_case2",
+	"properties": {
+		"description": "When column names are not matching but position values(datatypes) are matching",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "union_emp1",
+						"type": "DatasetReference"
+					},
+					"name": "union1"
+				},
+				{
+					"dataset": {
+						"referenceName": "union_diffcolname",
+						"type": "DatasetReference"
+					},
+					"name": "union2"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DF_emp_Output_filters",
+						"type": "DatasetReference"
+					},
+					"name": "sink1",
+					"rejectedDataLinkedService": {
+						"referenceName": "LS_ADLS_Gen2_1",
+						"type": "LinkedServiceReference"
+					}
+				}
+			],
+			"transformations": [
+				{
+					"name": "union3"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPLOYEE_ID as short,",
+				"          FIRST_NAME as string,",
+				"          LAST_NAME as string,",
+				"          SALARY as short,",
+				"          DEPARTMENT_ID as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> union1",
+				"source(output(",
+				"          empname as short,",
+				"          fname as string,",
+				"          lname as string,",
+				"          sal as short,",
+				"          dept as short",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> union2",
+				"union1, union2 union(byName: false,",
+				"     partitionBy('hash', 1))~> union3",
+				"union3 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['unioncase2_DIFFcolumnNames.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

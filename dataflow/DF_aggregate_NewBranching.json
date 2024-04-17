@@ -1,0 +1,76 @@
+{
+	"name": "DF_aggregate_NewBranching",
+	"properties": {
+		"description": "aggregate is for sum(salary) by group by etc. and New branch is for replica of previous DS for doing other works without impacting of original data",
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_windowfuncation",
+						"type": "DatasetReference"
+					},
+					"name": "input1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DF_emp_Output_filters",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "join1tables2Deptsum"
+				},
+				{
+					"name": "DeptSum"
+				},
+				{
+					"name": "countrySales"
+				},
+				{
+					"name": "join2withCountrySales"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          employee_id as string,",
+				"          first_name as string,",
+				"          department_name as string,",
+				"          country_id as string,",
+				"          salary as integer",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> input1",
+				"input1, DeptSum join(input1@department_name == DeptSum@department_name,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1tables2Deptsum",
+				"input1 aggregate(groupBy(department_name),",
+				"     dept_sum_col = sum(salary)) ~> DeptSum",
+				"input1 aggregate(groupBy(country_id),",
+				"     country_sales = sum(salary)) ~> countrySales",
+				"join1tables2Deptsum, countrySales join(input1@country_id == countrySales@country_id,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join2withCountrySales",
+				"join2withCountrySales sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['Aggregate_newBranching_output.csv'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}

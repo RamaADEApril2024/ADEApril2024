@@ -1,0 +1,59 @@
+{
+	"name": "PL_Variables_v1",
+	"properties": {
+		"activities": [
+			{
+				"name": "Set variable1",
+				"type": "SetVariable",
+				"dependsOn": [],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Var_Input",
+					"value": {
+						"value": "@pipeline().parameters.Parameter_val",
+						"type": "Expression"
+					}
+				}
+			},
+			{
+				"name": "Set variable2",
+				"type": "SetVariable",
+				"dependsOn": [
+					{
+						"activity": "Set variable1",
+						"dependencyConditions": [
+							"Succeeded"
+						]
+					}
+				],
+				"policy": {
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"variableName": "Var_Input",
+					"value": 50
+				}
+			}
+		],
+		"parameters": {
+			"Parameter_val": {
+				"type": "int",
+				"defaultValue": 2
+			}
+		},
+		"variables": {
+			"Var_Input": {
+				"type": "Integer"
+			}
+		},
+		"annotations": [],
+		"lastPublishTime": "2024-04-16T06:10:30Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}

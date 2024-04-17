@@ -1,0 +1,35 @@
+{
+	"name": "PL_Dataflow_aggregate",
+	"properties": {
+		"description": "With aggreagate, we can do some counts, sum, max, min, country by or department by",
+		"activities": [
+			{
+				"name": "DF_emp_sal_v1",
+				"type": "ExecuteDataFlow",
+				"dependsOn": [],
+				"policy": {
+					"timeout": "0.12:00:00",
+					"retry": 0,
+					"retryIntervalInSeconds": 30,
+					"secureOutput": false,
+					"secureInput": false
+				},
+				"userProperties": [],
+				"typeProperties": {
+					"dataflow": {
+						"referenceName": "DF_Filter_emp_sal",
+						"type": "DataFlowReference"
+					},
+					"compute": {
+						"coreCount": 8,
+						"computeType": "General"
+					},
+					"traceLevel": "Fine"
+				}
+			}
+		],
+		"annotations": [],
+		"lastPublishTime": "2024-04-14T10:13:42Z"
+	},
+	"type": "Microsoft.DataFactory/factories/pipelines"
+}
