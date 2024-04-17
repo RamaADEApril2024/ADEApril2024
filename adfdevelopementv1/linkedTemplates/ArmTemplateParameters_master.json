@@ -1,0 +1,42 @@
+{
+	"$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"value": "adfdevelopementv1"
+		},
+		"LS_ADLS_Gen2_1_accountKey": {
+			"value": ""
+		},
+		"LS_Blob_develepment_v1_connectionString": {
+			"value": ""
+		},
+		"LS_SQL_sfdc_os_v1_connectionString": {
+			"value": ""
+		},
+		"LS_SQl_parameter_connectionString": {
+			"value": ""
+		},
+		"KV_LS_ADLS_developement_V1_properties_typeProperties_baseUrl": {
+			"value": "https://KV-ade-rama1.vault.azure.net/"
+		},
+		"LS_ADLS_Gen2_1_properties_typeProperties_url": {
+			"value": "https://adlsdevelopementv1.dfs.core.windows.net/"
+		},
+		"EventTrigger_properties_typeProperties_scope": {
+			"value": "/subscriptions/e85e9012-0a76-434e-9d73-bec34c89fc71/resourceGroups/RG_ADE_Practice_v2/providers/Microsoft.Storage/storageAccounts/adlsdevelopementv1"
+		},
+		"Tumbling_trigger_V1_properties_pipeline_parameters_WindowStartDate": {
+			"value": "@trigger().outputs.windowStartTime"
+		},
+		"Tumbling_trigger_V1_properties_pipeline_parameters_WindowEndDate": {
+			"value": "@trigger().outputs.windowEndTime"
+		},
+		"containerUri": {
+			"value": ""
+		},
+		"containerSasToken": {
+			"value": ""
+		}
+	}
+}

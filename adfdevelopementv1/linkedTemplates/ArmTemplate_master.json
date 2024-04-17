@@ -1,0 +1,205 @@
+{
+	"$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
+	"contentVersion": "1.0.0.0",
+	"parameters": {
+		"factoryName": {
+			"type": "string",
+			"metadata": "Data Factory name",
+			"defaultValue": "adfdevelopementv1"
+		},
+		"LS_ADLS_Gen2_1_accountKey": {
+			"type": "secureString",
+			"metadata": "Secure string for 'accountKey' of 'LS_ADLS_Gen2_1'"
+		},
+		"LS_Blob_develepment_v1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_Blob_develepment_v1'"
+		},
+		"LS_SQL_sfdc_os_v1_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQL_sfdc_os_v1'"
+		},
+		"LS_SQl_parameter_connectionString": {
+			"type": "secureString",
+			"metadata": "Secure string for 'connectionString' of 'LS_SQl_parameter'"
+		},
+		"KV_LS_ADLS_developement_V1_properties_typeProperties_baseUrl": {
+			"type": "string",
+			"defaultValue": "https://KV-ade-rama1.vault.azure.net/"
+		},
+		"LS_ADLS_Gen2_1_properties_typeProperties_url": {
+			"type": "string",
+			"defaultValue": "https://adlsdevelopementv1.dfs.core.windows.net/"
+		},
+		"EventTrigger_properties_typeProperties_scope": {
+			"type": "string",
+			"defaultValue": "/subscriptions/e85e9012-0a76-434e-9d73-bec34c89fc71/resourceGroups/RG_ADE_Practice_v2/providers/Microsoft.Storage/storageAccounts/adlsdevelopementv1"
+		},
+		"Tumbling_trigger_V1_properties_pipeline_parameters_WindowStartDate": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowStartTime"
+		},
+		"Tumbling_trigger_V1_properties_pipeline_parameters_WindowEndDate": {
+			"type": "string",
+			"defaultValue": "@trigger().outputs.windowEndTime"
+		},
+		"containerUri": {
+			"type": "string",
+			"metadata": "URI to storage account containing linked ARM templates"
+		},
+		"containerSasToken": {
+			"type": "string",
+			"metadata": "Sas token to storage account containing linked ARM templates"
+		}
+	},
+	"variables": {
+		"factoryId": "[concat('Microsoft.DataFactory/factories/', parameters('factoryName'))]"
+	},
+	"resources": [
+		{
+			"name": "adfdevelopementv1_ArmTemplate_0",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_0.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"LS_ADLS_Gen2_1_accountKey": {
+						"value": "[parameters('LS_ADLS_Gen2_1_accountKey')]"
+					},
+					"LS_Blob_develepment_v1_connectionString": {
+						"value": "[parameters('LS_Blob_develepment_v1_connectionString')]"
+					},
+					"LS_SQL_sfdc_os_v1_connectionString": {
+						"value": "[parameters('LS_SQL_sfdc_os_v1_connectionString')]"
+					},
+					"LS_SQl_parameter_connectionString": {
+						"value": "[parameters('LS_SQl_parameter_connectionString')]"
+					},
+					"KV_LS_ADLS_developement_V1_properties_typeProperties_baseUrl": {
+						"value": "[parameters('KV_LS_ADLS_developement_V1_properties_typeProperties_baseUrl')]"
+					},
+					"LS_ADLS_Gen2_1_properties_typeProperties_url": {
+						"value": "[parameters('LS_ADLS_Gen2_1_properties_typeProperties_url')]"
+					}
+				}
+			},
+			"dependsOn": []
+		},
+		{
+			"name": "adfdevelopementv1_ArmTemplate_1",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_1.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adfdevelopementv1_ArmTemplate_0')]"
+			]
+		},
+		{
+			"name": "adfdevelopementv1_ArmTemplate_2",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_2.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"EventTrigger_properties_typeProperties_scope": {
+						"value": "[parameters('EventTrigger_properties_typeProperties_scope')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adfdevelopementv1_ArmTemplate_1')]"
+			]
+		},
+		{
+			"name": "adfdevelopementv1_ArmTemplate_3",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_3.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adfdevelopementv1_ArmTemplate_2')]"
+			]
+		},
+		{
+			"name": "adfdevelopementv1_ArmTemplate_4",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_4.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adfdevelopementv1_ArmTemplate_3')]"
+			]
+		},
+		{
+			"name": "adfdevelopementv1_ArmTemplate_5",
+			"type": "Microsoft.Resources/deployments",
+			"apiVersion": "2018-02-01",
+			"properties": {
+				"mode": "incremental",
+				"templateLink": {
+					"uri": "[concat(parameters('containerUri'), '/ArmTemplate_5.json', parameters('containerSasToken'))]",
+					"contentVersion": "1.0.0.0"
+				},
+				"parameters": {
+					"factoryName": {
+						"value": "[parameters('factoryName')]"
+					},
+					"Tumbling_trigger_V1_properties_pipeline_parameters_WindowStartDate": {
+						"value": "[parameters('Tumbling_trigger_V1_properties_pipeline_parameters_WindowStartDate')]"
+					},
+					"Tumbling_trigger_V1_properties_pipeline_parameters_WindowEndDate": {
+						"value": "[parameters('Tumbling_trigger_V1_properties_pipeline_parameters_WindowEndDate')]"
+					}
+				}
+			},
+			"dependsOn": [
+				"[resourceId('Microsoft.Resources/deployments', 'adfdevelopementv1_ArmTemplate_4')]"
+			]
+		}
+	]
+}
