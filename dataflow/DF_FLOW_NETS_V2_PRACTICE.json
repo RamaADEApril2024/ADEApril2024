@@ -1,0 +1,61 @@
+{
+	"name": "DF_FLOW_NETS_V2_PRACTICE",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "ds_emp_sal_flownetsV1",
+						"type": "DatasetReference"
+					},
+					"name": "source1"
+				}
+			],
+			"sinks": [
+				{
+					"dataset": {
+						"referenceName": "DF_emp_Output_filters",
+						"type": "DatasetReference"
+					},
+					"name": "sink1"
+				}
+			],
+			"transformations": [
+				{
+					"name": "flowlet1",
+					"flowlet": {
+						"referenceName": "flowlet1_CREATION",
+						"type": "DataFlowReference"
+					}
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          emp_id as string,",
+				"          Name as string,",
+				"          Salary as integer,",
+				"          department_name as string,",
+				"          country_id as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> source1",
+				"source1 compose(mapColumn(",
+				"          Salary,",
+				"          country_id",
+				"     ),",
+				"     composition: 'flowlet1_CREATION') ~> flowlet1@(output1)",
+				"flowlet1@output1 sink(allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     partitionFileNames:['DF_FLOWNET_FILEV1.CSV'],",
+				"     umask: 0022,",
+				"     preCommands: [],",
+				"     postCommands: [],",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true,",
+				"     partitionBy('hash', 1)) ~> sink1"
+			]
+		}
+	}
+}
