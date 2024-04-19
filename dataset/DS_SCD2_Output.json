@@ -1,0 +1,46 @@
+{
+	"name": "DS_SCD2_Output",
+	"properties": {
+		"linkedServiceName": {
+			"referenceName": "LS_SQL_sfdc_os_v1",
+			"type": "LinkedServiceReference"
+		},
+		"annotations": [],
+		"type": "AzureSqlTable",
+		"schema": [
+			{
+				"name": "EMPID",
+				"type": "int",
+				"precision": 10
+			},
+			{
+				"name": "NAME",
+				"type": "varchar"
+			},
+			{
+				"name": "DESIGNATION",
+				"type": "varchar"
+			},
+			{
+				"name": "DEPARTMENT",
+				"type": "varchar"
+			},
+			{
+				"name": "START_DATE",
+				"type": "date"
+			},
+			{
+				"name": "END_DATE",
+				"type": "date"
+			},
+			{
+				"name": "IS_ACTIVE",
+				"type": "varchar"
+			}
+		],
+		"typeProperties": {
+			"schema": "dbo",
+			"table": "SCD2_OUTPUT"
+		}
+	}
+}

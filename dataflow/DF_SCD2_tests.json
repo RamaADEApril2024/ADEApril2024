@@ -1,0 +1,82 @@
+{
+	"name": "DF_SCD2_tests",
+	"properties": {
+		"type": "MappingDataFlow",
+		"typeProperties": {
+			"sources": [
+				{
+					"dataset": {
+						"referenceName": "DS_SCD2_Input",
+						"type": "DatasetReference"
+					},
+					"name": "SCD2Input"
+				},
+				{
+					"dataset": {
+						"referenceName": "DS_SCD2_Output",
+						"type": "DatasetReference"
+					},
+					"name": "SCD2Output"
+				}
+			],
+			"sinks": [],
+			"transformations": [
+				{
+					"name": "join1"
+				},
+				{
+					"name": "filter1"
+				},
+				{
+					"name": "derivedColumn1"
+				},
+				{
+					"name": "select1"
+				}
+			],
+			"scriptLines": [
+				"source(output(",
+				"          EMPID as integer,",
+				"          NAME as string,",
+				"          DESIGNATION as string,",
+				"          DEPARTMENT as string,",
+				"          START_DATE as date 'MM/dd/yyyy',",
+				"          END_DATE as date 'MM/dd/yyyy'",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     ignoreNoFilesFound: false) ~> SCD2Input",
+				"source(output(",
+				"          EMPID as integer,",
+				"          NAME as string,",
+				"          DESIGNATION as string,",
+				"          DEPARTMENT as string,",
+				"          START_DATE as date,",
+				"          END_DATE as date,",
+				"          IS_ACTIVE as string",
+				"     ),",
+				"     allowSchemaDrift: true,",
+				"     validateSchema: false,",
+				"     isolationLevel: 'READ_UNCOMMITTED',",
+				"     format: 'table') ~> SCD2Output",
+				"SCD2Output, SCD2Input join(SCD2Output@EMPID == SCD2Input@EMPID,",
+				"     joinType:'inner',",
+				"     matchType:'exact',",
+				"     ignoreSpaces: false,",
+				"     broadcast: 'auto')~> join1",
+				"join1 filter(IS_ACTIVE=='Y') ~> filter1",
+				"select1 derive(END_DATE = addDays((END_DATE), -1)) ~> derivedColumn1",
+				"filter1 select(mapColumn(",
+				"          EMPID = SCD2Output@EMPID,",
+				"          NAME = SCD2Output@NAME,",
+				"          DESIGNATION = SCD2Output@DESIGNATION,",
+				"          DEPARTMENT = SCD2Output@DEPARTMENT,",
+				"          START_DATE = SCD2Output@START_DATE,",
+				"          END_DATE = SCD2Input@START_DATE",
+				"     ),",
+				"     skipDuplicateMapInputs: true,",
+				"     skipDuplicateMapOutputs: true) ~> select1"
+			]
+		}
+	}
+}
