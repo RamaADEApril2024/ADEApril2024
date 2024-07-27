@@ -2,7 +2,7 @@
 	"name": "Tumbling_trigger_V1",
 	"properties": {
 		"annotations": [],
-		"runtimeState": "Started",
+		"runtimeState": "Stopped",
 		"pipeline": {
 			"pipelineReference": {
 				"referenceName": "PL_Tumbling_trigger",
